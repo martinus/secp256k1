@@ -167,18 +167,18 @@ static void bench_ecmult_1p_g_teardown(void* arg, int iters) {
 static void run_ecmult_bench(bench_data* data, int iters) {
     char str[32];
     sprintf(str, "ecmult_gen");
-    run_benchmark(str, bench_ecmult_gen, bench_ecmult_setup, bench_ecmult_gen_teardown, data, 10, iters);
+    run_benchmark(str, bench_ecmult_gen, bench_ecmult_setup, bench_ecmult_gen_teardown, data, 10, iters, 0);
     sprintf(str, "ecmult_const");
-    run_benchmark(str, bench_ecmult_const, bench_ecmult_setup, bench_ecmult_const_teardown, data, 10, iters);
+    run_benchmark(str, bench_ecmult_const, bench_ecmult_setup, bench_ecmult_const_teardown, data, 10, iters, 0);
     /* ecmult with non generator point */
     sprintf(str, "ecmult_1p");
-    run_benchmark(str, bench_ecmult_1p, bench_ecmult_setup, bench_ecmult_1p_teardown, data, 10, iters);
+    run_benchmark(str, bench_ecmult_1p, bench_ecmult_setup, bench_ecmult_1p_teardown, data, 10, iters, 0);
     /* ecmult with generator point */
     sprintf(str, "ecmult_0p_g");
-    run_benchmark(str, bench_ecmult_0p_g, bench_ecmult_setup, bench_ecmult_0p_g_teardown, data, 10, iters);
+    run_benchmark(str, bench_ecmult_0p_g, bench_ecmult_setup, bench_ecmult_0p_g_teardown, data, 10, iters, 0);
     /* ecmult with generator and non-generator point. The reported time is per point. */
     sprintf(str, "ecmult_1p_g");
-    run_benchmark(str, bench_ecmult_1p_g, bench_ecmult_setup, bench_ecmult_1p_g_teardown, data, 10, 2*iters);
+    run_benchmark(str, bench_ecmult_1p_g, bench_ecmult_setup, bench_ecmult_1p_g_teardown, data, 10, 2*iters, 0);
 }
 
 static int bench_ecmult_multi_callback(secp256k1_scalar* sc, secp256k1_ge* ge, size_t idx, void* arg) {
@@ -270,7 +270,7 @@ static void run_ecmult_multi_bench(bench_data* data, size_t count, int includes_
     } else {
         sprintf(str, "ecmult_multi_%ip", (int)count);
     }
-    run_benchmark(str, bench_ecmult_multi, bench_ecmult_multi_setup, bench_ecmult_multi_teardown, data, 10, count * iters);
+    run_benchmark(str, bench_ecmult_multi, bench_ecmult_multi_setup, bench_ecmult_multi_teardown, data, 10, count * iters, 0);
 }
 
 int main(int argc, char **argv) {

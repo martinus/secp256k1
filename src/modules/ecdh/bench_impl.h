@@ -49,7 +49,7 @@ static void run_ecdh_bench(int iters, int argc, char** argv) {
     /* create a context with no capabilities */
     data.ctx = secp256k1_context_create(SECP256K1_FLAGS_TYPE_CONTEXT);
 
-    if (d || have_flag(argc, argv, "ecdh")) run_benchmark("ecdh", bench_ecdh, bench_ecdh_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "ecdh")) run_benchmark("ecdh", bench_ecdh, bench_ecdh_setup, NULL, &data, /*count=*/10, iters, /*time_ms=*/1000);
 
     secp256k1_context_destroy(data.ctx);
 }

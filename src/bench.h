@@ -7,6 +7,7 @@
 #ifndef SECP256K1_BENCH_H
 #define SECP256K1_BENCH_H
 
+#include <limits.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -95,13 +96,38 @@ static void print_number(const int64_t x) {
     printf("%-*s", FP_EXP, &buffer[ptr + g]); /* Prints fractional part */
 }
 
-static void run_benchmark(char *name, void (*benchmark)(void*, int), void (*setup)(void*), void (*teardown)(void*, int), void* data, int count, int iter) {
-    int i;
+static void run_benchmark(char *name, void (*benchmark)(void*, int), void (*setup)(void*), void (*teardown)(void*, int), void* data, int count, int iters, int64_t expected_us) {
+    int iter = 1;
+    int64_t total = 0;
+
     int64_t min = INT64_MAX;
     int64_t sum = 0;
     int64_t max = 0;
+    int i;
+
+    /* when iters=0, determine number of iterations automatically. We do that by increasing the number of iterations by a
+       factor of 10 until we reach a time that's reasonably close to the expected_us so we can estimate the correct number
+       of iterations with some certainty. */
+    if (iters == 0) {
+        while (total < expected_us/10 && iters < INT_MAX/10) {
+            int64_t begin;
+            iter *= 10;
+            if (setup != NULL) {
+                setup(data);
+            }
+            begin = gettime_i64();
+            benchmark(data, iter);
+            total = gettime_i64() - begin;
+            if (teardown != NULL) {
+                teardown(data, iter);
+            }
+        }
+        /* close enough, now estimate number of iterations */
+        iter = (int64_t)iter * expected_us / total;
+    }
+
     for (i = 0; i < count; i++) {
-        int64_t begin, total;
+        int64_t begin;
         if (setup != NULL) {
             setup(data);
         }
@@ -173,6 +199,15 @@ static int get_iters(int default_iters) {
         return strtol(env, NULL, 0);
     } else {
         return default_iters;
+    }
+}
+
+static int get_time_ms(int default_time_ms) {
+    char* env = getenv("SECP256K1_BENCH_TIME_MS");
+    if (env) {
+        return strtol(env, NULL, 0);
+    } else {
+        return default_time_ms;
     }
 }
 

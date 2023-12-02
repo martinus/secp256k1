@@ -384,8 +384,15 @@ static void bench_context(void* arg, int iters) {
 
 int main(int argc, char **argv) {
     bench_inv data;
-    int default_iters = 20000;
+    int default_iters = 0;
     int iters = get_iters(default_iters);
+
+    int default_time_ms = 1000;
+    int time_ms = get_time_ms(default_time_ms);
+
+    int count = 10;
+    int64_t expected_us = (int64_t)time_ms * 1000 / count;
+
     int d = argc == 1; /* default */
 
     if (argc > 1) {
@@ -399,38 +406,38 @@ int main(int argc, char **argv) {
 
     print_output_table_header_row();
 
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "half")) run_benchmark("scalar_half", bench_scalar_half, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "add")) run_benchmark("scalar_add", bench_scalar_add, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "negate")) run_benchmark("scalar_negate", bench_scalar_negate, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "mul")) run_benchmark("scalar_mul", bench_scalar_mul, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "split")) run_benchmark("scalar_split", bench_scalar_split, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "inverse")) run_benchmark("scalar_inverse", bench_scalar_inverse, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "inverse")) run_benchmark("scalar_inverse_var", bench_scalar_inverse_var, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "half")) run_benchmark("scalar_half", bench_scalar_half, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "add")) run_benchmark("scalar_add", bench_scalar_add, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "negate")) run_benchmark("scalar_negate", bench_scalar_negate, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "mul")) run_benchmark("scalar_mul", bench_scalar_mul, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "split")) run_benchmark("scalar_split", bench_scalar_split, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "inverse")) run_benchmark("scalar_inverse", bench_scalar_inverse, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "scalar") || have_flag(argc, argv, "inverse")) run_benchmark("scalar_inverse_var", bench_scalar_inverse_var, bench_setup, NULL, &data, count, iters, expected_us);
 
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "half")) run_benchmark("field_half", bench_field_half, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "normalize")) run_benchmark("field_normalize", bench_field_normalize, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "normalize")) run_benchmark("field_normalize_weak", bench_field_normalize_weak, bench_setup, NULL, &data, 10, iters*100);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "sqr")) run_benchmark("field_sqr", bench_field_sqr, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "mul")) run_benchmark("field_mul", bench_field_mul, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "inverse")) run_benchmark("field_inverse", bench_field_inverse, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "inverse")) run_benchmark("field_inverse_var", bench_field_inverse_var, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "issquare")) run_benchmark("field_is_square_var", bench_field_is_square_var, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "sqrt")) run_benchmark("field_sqrt", bench_field_sqrt, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "half")) run_benchmark("field_half", bench_field_half, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "normalize")) run_benchmark("field_normalize", bench_field_normalize, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "normalize")) run_benchmark("field_normalize_weak", bench_field_normalize_weak, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "sqr")) run_benchmark("field_sqr", bench_field_sqr, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "mul")) run_benchmark("field_mul", bench_field_mul, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "inverse")) run_benchmark("field_inverse", bench_field_inverse, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "inverse")) run_benchmark("field_inverse_var", bench_field_inverse_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "issquare")) run_benchmark("field_is_square_var", bench_field_is_square_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "field") || have_flag(argc, argv, "sqrt")) run_benchmark("field_sqrt", bench_field_sqrt, bench_setup, NULL, &data, count, iters, expected_us);
 
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "double")) run_benchmark("group_double_var", bench_group_double_var, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_var", bench_group_add_var, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_affine", bench_group_add_affine, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_affine_var", bench_group_add_affine_var, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_zinv_var", bench_group_add_zinv_var, bench_setup, NULL, &data, 10, iters*10);
-    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "to_affine")) run_benchmark("group_to_affine_var", bench_group_to_affine_var, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "double")) run_benchmark("group_double_var", bench_group_double_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_var", bench_group_add_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_affine", bench_group_add_affine, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_affine_var", bench_group_add_affine_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "add")) run_benchmark("group_add_zinv_var", bench_group_add_zinv_var, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "group") || have_flag(argc, argv, "to_affine")) run_benchmark("group_to_affine_var", bench_group_to_affine_var, bench_setup, NULL, &data, count, iters, expected_us);
 
-    if (d || have_flag(argc, argv, "ecmult") || have_flag(argc, argv, "wnaf")) run_benchmark("ecmult_wnaf", bench_ecmult_wnaf, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "ecmult") || have_flag(argc, argv, "wnaf")) run_benchmark("ecmult_wnaf", bench_ecmult_wnaf, bench_setup, NULL, &data, count, iters, expected_us);
 
-    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "sha256")) run_benchmark("hash_sha256", bench_sha256, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "hmac")) run_benchmark("hash_hmac_sha256", bench_hmac_sha256, bench_setup, NULL, &data, 10, iters);
-    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "rng6979")) run_benchmark("hash_rfc6979_hmac_sha256", bench_rfc6979_hmac_sha256, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "sha256")) run_benchmark("hash_sha256", bench_sha256, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "hmac")) run_benchmark("hash_hmac_sha256", bench_hmac_sha256, bench_setup, NULL, &data, count, iters, expected_us);
+    if (d || have_flag(argc, argv, "hash") || have_flag(argc, argv, "rng6979")) run_benchmark("hash_rfc6979_hmac_sha256", bench_rfc6979_hmac_sha256, bench_setup, NULL, &data, count, iters, expected_us);
 
-    if (d || have_flag(argc, argv, "context")) run_benchmark("context_create", bench_context, bench_setup, NULL, &data, 10, iters);
+    if (d || have_flag(argc, argv, "context")) run_benchmark("context_create", bench_context, bench_setup, NULL, &data, count, iters, expected_us);
 
     return 0;
 }
